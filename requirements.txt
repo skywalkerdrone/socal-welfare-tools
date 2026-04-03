@@ -1,0 +1,7 @@
+streamlit
+st-gsheets-connection
+pandas
+openai
+python-dotenv
+koreanize-matplotlib
+seaborn

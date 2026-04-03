@@ -166,32 +166,6 @@ def main():
         </div>
     """, unsafe_allow_html=True)
 
-    # API 설정 섹션 (접이식으로 추가하여 디버깅 지원)
-    with st.expander("⚙️ API 연결 설정 (연결 오류 발생 시 확인)"):
-        st.info("💡 OpenRouter API Key가 올바르게 작동하지 않는 경우 여기서 직접 입력할 수 있습니다.")
-        manual_key = st.text_input("OpenRouter API Key 입력", value=st.session_state.api_key, type="password")
-        
-        col1, col2 = st.columns([1, 1])
-        with col1:
-            if st.button("설정 저장", use_container_width=True):
-                st.session_state.api_key = manual_key.strip()
-                st.success("API Key가 수동으로 설정되었습니다.")
-                st.rerun()
-        with col2:
-            if st.button("⚡ 연결 테스트", use_container_width=True):
-                test_result = ai_engine.test_connection()
-                if test_result["status"] == "success":
-                    st.success(test_result["message"])
-                else:
-                    st.error(test_result["message"])
-                    st.warning("⚠️ 401 'User not found' 오류는 보통 API Key 자체가 틀렸거나 만료되었을 때 발생합니다.")
-        
-        # 현재 상태 표시
-        if st.secrets.get("OPENROUTER_API_KEY"):
-            st.write("✅ 서버(Secrets)로부터 키를 인식했습니다.")
-        else:
-            st.write("❌ 서버(Secrets)에 키가 설정되어 있지 않습니다.")
-
     # 상단: 연구 생성 폼
     render_generation_form()
     

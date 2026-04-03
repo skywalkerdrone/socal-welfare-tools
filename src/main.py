@@ -36,12 +36,22 @@ st.set_page_config(
 
 # DB 및 AI 엔진 초기화
 db = SocialWelfareDB()
-# 환경 변수에서 최신 키 로드 (OpenRouter 우선)
-env_api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENAI_API_KEY", "")
+
+# 환경 변수 및 st.secrets에서 최신 키 로드 (Streamlit Cloud 환경 대응)
+try:
+    env_api_key = (
+        st.secrets.get("OPENROUTER_API_KEY") or 
+        st.secrets.get("OPENAI_API_KEY") or 
+        os.environ.get("OPENROUTER_API_KEY") or 
+        os.environ.get("OPENAI_API_KEY", "")
+    )
+except:
+    env_api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENAI_API_KEY", "")
 
 if 'api_key' not in st.session_state or not st.session_state.api_key:
     st.session_state.api_key = env_api_key
-# 검색 결과에 상관없이 엔진은 우선 환경 변수 키를 보되, 세션 키가 있다면 그것을 사용 (설정 화면 대응)
+
+# 엔진 초기화 (최신 키 사용)
 ai_engine = AIEngine(api_key=st.session_state.api_key or env_api_key)
 
 # 세션 상태 초기화

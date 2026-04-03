@@ -158,14 +158,28 @@ def main():
     """
     st.markdown(textwrap.dedent(css_code).strip(), unsafe_allow_html=True)
 
-    # 헤더 섹션
-    header_html = """
+    # 상단 헤더
+    st.markdown(f"""
         <div class="main-header">
-            <h1>🤖 AI 사회복지 연구 리서치 허브</h1>
-            <p>지능형 알고리즘을 통한 최적의 연구 설계 및 조사 도구 자동화 시스템</p>
+            <h1>🌐 AI 사회복지 연구 리서치 허브</h1>
+            <p>지형 알고리즘을 통한 최적의 연구 설계 및 조사 도구 자동화 시스템</p>
         </div>
-    """
-    st.markdown(textwrap.dedent(header_html).strip(), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+
+    # API 설정 섹션 (접이식으로 추가하여 디버깅 지원)
+    with st.expander("⚙️ API 연결 설정 (연결 오류 발생 시 확인)"):
+        st.info("💡 OpenRouter API Key가 올바르게 작동하지 않는 경우 여기서 직접 입력할 수 있습니다.")
+        manual_key = st.text_input("OpenRouter API Key 입력", value=st.session_state.api_key, type="password")
+        if st.button("설정 저장"):
+            st.session_state.api_key = manual_key.strip()
+            st.success("API Key가 수동으로 설정되었습니다. 이제 다시 시도해 보세요!")
+            st.rerun()
+        
+        # 현재 상태 표시
+        if st.secrets.get("OPENROUTER_API_KEY"):
+            st.write("✅ 서버(Secrets)로부터 키를 인식했습니다.")
+        else:
+            st.write("❌ 서버(Secrets)에 키가 설정되어 있지 않습니다.")
 
     # 상단: 연구 생성 폼
     render_generation_form()

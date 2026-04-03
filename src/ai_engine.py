@@ -33,6 +33,21 @@ class AIEngine:
         else:
             self.client = None
 
+    def test_connection(self) -> Dict:
+        """
+        연결 상태를 간편하게 테스트하여 결과 반환
+        """
+        if not self.client:
+            return {"status": "error", "message": "API Key가 설정되지 않았습니다."}
+        
+        try:
+            # 모델 목록을 불러와 키의 유효성 확인
+            self.client.models.list()
+            return {"status": "success", "message": "OpenRouter 연결 성공! 키가 정상적으로 인식되었습니다."}
+        except Exception as e:
+            # 401, 403 등 구체적인 오류 코드 및 메시지 획득
+            return {"status": "error", "message": f"연결 실패: {str(e)}"}
+
     def analyze_topic(self, topic_text: str) -> Dict:
         """
         주제 텍스트를 분석하여 연구 설계에 필요한 구조화된 데이터 반환

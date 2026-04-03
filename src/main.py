@@ -170,10 +170,21 @@ def main():
     with st.expander("⚙️ API 연결 설정 (연결 오류 발생 시 확인)"):
         st.info("💡 OpenRouter API Key가 올바르게 작동하지 않는 경우 여기서 직접 입력할 수 있습니다.")
         manual_key = st.text_input("OpenRouter API Key 입력", value=st.session_state.api_key, type="password")
-        if st.button("설정 저장"):
-            st.session_state.api_key = manual_key.strip()
-            st.success("API Key가 수동으로 설정되었습니다. 이제 다시 시도해 보세요!")
-            st.rerun()
+        
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("설정 저장", use_container_width=True):
+                st.session_state.api_key = manual_key.strip()
+                st.success("API Key가 수동으로 설정되었습니다.")
+                st.rerun()
+        with col2:
+            if st.button("⚡ 연결 테스트", use_container_width=True):
+                test_result = ai_engine.test_connection()
+                if test_result["status"] == "success":
+                    st.success(test_result["message"])
+                else:
+                    st.error(test_result["message"])
+                    st.warning("⚠️ 401 'User not found' 오류는 보통 API Key 자체가 틀렸거나 만료되었을 때 발생합니다.")
         
         # 현재 상태 표시
         if st.secrets.get("OPENROUTER_API_KEY"):

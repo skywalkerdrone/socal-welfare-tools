@@ -17,13 +17,18 @@ class AIEngine:
         """
         # OpenRouter 키 우선, 없으면 OpenAI 키 사용
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
-        self.model = model or os.getenv("AI_MODEL_NAME", "openrouter/auto-free")
+        # 구글 제미나이 또는 미스트랄 무료 모델로 명시적으로 변경 (openrouter/auto-free 대신 권장)
+        self.model = model or os.getenv("AI_MODEL_NAME", "google/gemini-pro-1.5-exp-0827:free")
         self.base_url = os.getenv("AI_API_BASE", "https://openrouter.ai/api/v1")
         
         if self.api_key:
             self.client = OpenAI(
                 api_key=self.api_key,
-                base_url=self.base_url
+                base_url=self.base_url,
+                default_headers={
+                    "HTTP-Referer": "https://social-welfare-tool.streamlit.app", # 식별용 주소
+                    "X-Title": "AI Social Welfare Research Tool"
+                }
             )
         else:
             self.client = None

@@ -52,7 +52,8 @@ class SocialWelfareDB:
             "password": str(researcher_info.get("password", "")), # 명시적 문자열 저장
             "design_json": json.dumps(design, ensure_ascii=False),
             "survey_json": json.dumps(survey, ensure_ascii=False),
-            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "created_at": datetime.now().strftime("%Y-%m-%d")
+            # "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         
         try:

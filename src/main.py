@@ -254,12 +254,8 @@ def render_generation_form():
                 current_topic = st.session_state.main_topic_input
                 
                 if not st.session_state.api_key or st.session_state.api_key == "your_api_key_here":
-                    st.error("⚠️ **API Key**가 설정되지 않았거나 초기값입니다. [Advanced settings > Secrets] 메뉴를 확인해 주세요.")
+                    st.error("⚠️ **API Key**가 설정되지 않았거나 초기값입니다. 상단의 [⚙️ API 연결 설정] 메뉴를 확인해 주세요.")
                     return
-                else:
-                    # 디버깅용 마스킹 출력 (첫 7자리만 노출하여 본인 키가 맞는지 확인용)
-                    key_hint = f"{st.session_state.api_key[:7]}..." if len(st.session_state.api_key) > 7 else "???"
-                    st.info(f"💡 현재 사용 중인 API Key: `{key_hint}` (확인용 마스킹)")
                     
                 if not current_topic:
                     st.error("연구 주제를 입력해 주세요.")

@@ -41,10 +41,19 @@ db = SocialWelfareDB()
 def get_api_key():
     # 1. st.secrets 확인 (가장 우선)
     try:
-        if "OPENROUTER_API_KEY" in st.secrets:
+        # 루트 레벨 확인
+        if "OPENROUTER_API_KEY" in st.secrets and st.secrets["OPENROUTER_API_KEY"]:
             return st.secrets["OPENROUTER_API_KEY"]
         if "OPENAI_API_KEY" in st.secrets:
             return st.secrets["OPENAI_API_KEY"]
+            
+        # 혹시나 구글 시트 섹션 안에 실수로 넣었을 경우 대비
+        try:
+            gsheets = st.secrets.get("connections", {}).get("gsheets", {})
+            if "OPENROUTER_API_KEY" in gsheets:
+                return gsheets["OPENROUTER_API_KEY"]
+        except:
+            pass
     except:
         pass
     

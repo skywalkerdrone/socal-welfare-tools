@@ -80,9 +80,10 @@ class SocialWelfareDB:
         if df.empty:
             return []
         
-        # 'created_at' 컬럼 확인 (소문자화 됨)
-        if "created_at" in df.columns:
-            df = df.sort_values(by="created_at", ascending=False)
+        # id는 Unix 타임스탬프이므로 정확한 생성 순서 보장
+        if "id" in df.columns:
+            df["id"] = pd.to_numeric(df["id"], errors="coerce")
+            df = df.sort_values(by="id", ascending=False)
             
         # 필요한 필드 매칭 (id, topic, researcher_name, created_at)
         return df.to_dict("records")
